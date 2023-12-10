@@ -8,6 +8,9 @@
 #ifndef SEV_INTERFACE_H_
 #define SEV_INTERFACE_H_
 
+/*Includes*/
+#include "../../LIB/STD_Types.h"
+
 /*Macros*/
 #define SEV_PORTA 0
 #define SEV_PORTB 1

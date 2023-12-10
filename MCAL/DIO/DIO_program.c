@@ -20,7 +20,7 @@ void DIO_voidInit(void)
     DDRD = CONC(DIO_PIN_DIR_D7,DIO_PIN_DIR_D6,DIO_PIN_DIR_D5,DIO_PIN_DIR_D4,DIO_PIN_DIR_D3,DIO_PIN_DIR_D2,DIO_PIN_DIR_D1,DIO_PIN_DIR_D0);
 }
 
-tenuErrorStatus DIO_u8WritePinValue(const uint8 u8PortCpy, const uint8 u8PinCpy, const uint8 u8ValueCpy)
+tenuErrorStatus DIO_enuWritePinValue(const uint8 u8PortCpy, const uint8 u8PinCpy, const uint8 u8ValueCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -97,7 +97,7 @@ tenuErrorStatus DIO_u8WritePinValue(const uint8 u8PortCpy, const uint8 u8PinCpy,
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8ReadPinValue(const uint8 u8PortCpy, const uint8 u8PinCpy, uint8* const pu8ValueCpy)
+tenuErrorStatus DIO_enuReadPinValue(const uint8 u8PortCpy, const uint8 u8PinCpy, uint8* const pu8ValueCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -134,7 +134,7 @@ tenuErrorStatus DIO_u8ReadPinValue(const uint8 u8PortCpy, const uint8 u8PinCpy, 
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8TogglePinValue(const uint8 u8PortCpy, const uint8 u8PinCpy)
+tenuErrorStatus DIO_enuTogglePinValue(const uint8 u8PortCpy, const uint8 u8PinCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -167,7 +167,7 @@ tenuErrorStatus DIO_u8TogglePinValue(const uint8 u8PortCpy, const uint8 u8PinCpy
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8WritePortValue(const uint8 u8PortCpy, const uint8 u8ValueCpy)
+tenuErrorStatus DIO_enuWritePortValue(const uint8 u8PortCpy, const uint8 u8ValueCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -193,7 +193,7 @@ tenuErrorStatus DIO_u8WritePortValue(const uint8 u8PortCpy, const uint8 u8ValueC
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8ReadPortValue(const uint8 u8PortCpy, uint8* const pu8ValueCpy)
+tenuErrorStatus DIO_enuReadPortValue(const uint8 u8PortCpy, uint8* const pu8ValueCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -226,7 +226,7 @@ tenuErrorStatus DIO_u8ReadPortValue(const uint8 u8PortCpy, uint8* const pu8Value
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8TogglePortValue(const uint8 u8PortCpy)
+tenuErrorStatus DIO_enuTogglePortValue(const uint8 u8PortCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -252,7 +252,7 @@ tenuErrorStatus DIO_u8TogglePortValue(const uint8 u8PortCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8SetPinDirection(const uint8 u8PortCpy, const uint8 u8PinCpy, const uint8 u8DirCpy)
+tenuErrorStatus DIO_enuSetPinDirection(const uint8 u8PortCpy, const uint8 u8PinCpy, const uint8 u8DirCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -329,7 +329,7 @@ tenuErrorStatus DIO_u8SetPinDirection(const uint8 u8PortCpy, const uint8 u8PinCp
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8GetPinDirection(const uint8 u8PortCpy, const uint8 u8PinCpy, uint8* const pu8DirCpy)
+tenuErrorStatus DIO_enuGetPinDirection(const uint8 u8PortCpy, const uint8 u8PinCpy, uint8* const pu8DirCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -366,7 +366,7 @@ tenuErrorStatus DIO_u8GetPinDirection(const uint8 u8PortCpy, const uint8 u8PinCp
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8SetPortDirection(const uint8 u8PortCpy, const uint8 u8DirCpy)
+tenuErrorStatus DIO_enuSetPortDirection(const uint8 u8PortCpy, const uint8 u8DirCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -392,7 +392,7 @@ tenuErrorStatus DIO_u8SetPortDirection(const uint8 u8PortCpy, const uint8 u8DirC
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8GetPortDirection(const uint8 u8PortCpy, uint8* const pu8DirCpy)
+tenuErrorStatus DIO_enuGetPortDirection(const uint8 u8PortCpy, uint8* const pu8DirCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -425,7 +425,7 @@ tenuErrorStatus DIO_u8GetPortDirection(const uint8 u8PortCpy, uint8* const pu8Di
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8PullUpEnable(const uint8 u8PortCpy, const uint8 u8PinCpy)
+tenuErrorStatus DIO_enuPullUpEnable(const uint8 u8PortCpy, const uint8 u8PinCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -486,7 +486,7 @@ tenuErrorStatus DIO_u8PullUpEnable(const uint8 u8PortCpy, const uint8 u8PinCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus DIO_u8PullUpDisable(const uint8 u8PortCpy, const uint8 u8PinCpy)
+tenuErrorStatus DIO_enuPullUpDisable(const uint8 u8PortCpy, const uint8 u8PinCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
