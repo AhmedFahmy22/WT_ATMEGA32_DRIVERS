@@ -8,6 +8,6 @@
 #ifndef SEV_CONFIG_H_
 #define SEV_CONFIG_H_
 
-#define SEV_MAX_NUM 3
+#define SEV_MAX_NUM 2
 
 #endif

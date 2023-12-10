@@ -26,7 +26,7 @@
 /*Function Prototypes*/
 void SEV_voidInit(void);
 
-tenuErrorStatus SEV_enuDisplayNum(uint8 u8NumCpy, uint8 u8SevIndxCpy);
+tenuErrorStatus SEV_enuDisplayNum(uint8 u8SevIndxCpy, uint8 u8NumCpy);
 
 tenuErrorStatus SEV_enuEnable(uint8 u8SevIndxCpy);
 

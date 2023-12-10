@@ -15,7 +15,7 @@
 #include "SEV_private.h"
 
 /*Global Variables*/
-uint8 au8DisplayPatternsGlb[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x07, 0x7F, 0x6F};
+uint8 au8DisplayPatternsGlb[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
 
 
 /*Function Definitions*/
@@ -43,7 +43,7 @@ void SEV_voidInit(void)
         {
             /*Disable Display from the Common Pin*/
             DIO_enuWritePinValue(astrSevConfigGlb[u8CntrLoc].u8DisplayPort, DIO_PIN7, DIO_LOW);
-            SET_BIT(u8PortValueLoc, 7);
+            CLR_BIT(u8PortValueLoc, 7);
 
             /*Display initial value*/
             u8PortValueLoc |= ~(au8DisplayPatternsGlb[astrSevConfigGlb[u8CntrLoc].u8InitNum]);
@@ -52,7 +52,7 @@ void SEV_voidInit(void)
     }
 }
 
-tenuErrorStatus SEV_enuDisplayNum(uint8 u8NumCpy, uint8 u8SevIndxCpy)
+tenuErrorStatus SEV_enuDisplayNum(uint8 u8SevIndxCpy, uint8 u8NumCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
     uint8 u8PortValueLoc=0;
@@ -91,11 +91,11 @@ tenuErrorStatus SEV_enuEnable(uint8 u8SevIndxCpy)
     {
         if(astrSevConfigGlb[u8SevIndxCpy].u8CommonType==SEV_COMMON_CATHODE)
         {
-            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_HIGH);
+            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_LOW);
         }
         else if(astrSevConfigGlb[u8SevIndxCpy].u8CommonType==SEV_COMMON_ANODE)
         {
-            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_LOW);
+            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_HIGH);
         }
     }
 
@@ -114,11 +114,11 @@ tenuErrorStatus SEV_enuDisable(uint8 u8SevIndxCpy)
     {
         if(astrSevConfigGlb[u8SevIndxCpy].u8CommonType==SEV_COMMON_CATHODE)
         {
-            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_LOW);
+            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_HIGH);
         }
         else if(astrSevConfigGlb[u8SevIndxCpy].u8CommonType==SEV_COMMON_ANODE)
         {
-            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_HIGH);
+            enuErrorStatLoc |= DIO_enuWritePinValue(astrSevConfigGlb[u8SevIndxCpy].u8DisplayPort, DIO_PIN7, DIO_LOW);
         }
     }
 
