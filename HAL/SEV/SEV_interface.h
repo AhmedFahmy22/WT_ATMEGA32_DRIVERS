@@ -3,7 +3,7 @@
 /* Layer   : HAL                                                 */
 /* SWC     : SEV                                                 */
 /* Version : 1.0                                                 */
-/* Date    : 10 Dec 2023                                         */
+/* Date    : 11 Dec 2023                                         */
 /*****************************************************************/
 #ifndef SEV_INTERFACE_H_
 #define SEV_INTERFACE_H_
@@ -26,12 +26,12 @@
 /*Function Prototypes*/
 void SEV_voidInit(void);
 
-tenuErrorStatus SEV_enuDisplayNum(uint8 u8SevIndxCpy, uint8 u8NumCpy);
+tenuErrorStatus SEV_enuDisplayNum(const uint8 u8SevIndxCpy, const uint8 u8NumCpy);
 
-tenuErrorStatus SEV_enuEnable(uint8 u8SevIndxCpy);
+tenuErrorStatus SEV_enuEnable(const uint8 u8SevIndxCpy);
 
-tenuErrorStatus SEV_enuDisable(uint8 u8SevIndxCpy);
+tenuErrorStatus SEV_enuDisable(const uint8 u8SevIndxCpy);
 
-tenuErrorStatus SEV_enuToggle(uint8 u8SevIndxCpy);
+tenuErrorStatus SEV_enuToggle(const uint8 u8SevIndxCpy);
 
 #endif

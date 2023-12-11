@@ -3,7 +3,7 @@
 /* Layer   : HAL                                                 */
 /* SWC     : SEV                                                 */
 /* Version : 1.0                                                 */
-/* Date    : 10 Dec 2023                                         */
+/* Date    : 11 Dec 2023                                         */
 /*****************************************************************/
 #include "../../LIB/STD_Types.h"
 #include "../../LIB/BIT_Math.h"
@@ -15,7 +15,7 @@
 #include "SEV_private.h"
 
 /*Global Variables*/
-uint8 au8DisplayPatternsGlb[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
+static uint8 au8DisplayPatternsGlb[10] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F};
 
 
 /*Function Definitions*/
@@ -52,7 +52,7 @@ void SEV_voidInit(void)
     }
 }
 
-tenuErrorStatus SEV_enuDisplayNum(uint8 u8SevIndxCpy, uint8 u8NumCpy)
+tenuErrorStatus SEV_enuDisplayNum(const uint8 u8SevIndxCpy, const uint8 u8NumCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
     uint8 u8PortValueLoc=0;
@@ -79,7 +79,7 @@ tenuErrorStatus SEV_enuDisplayNum(uint8 u8SevIndxCpy, uint8 u8NumCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus SEV_enuEnable(uint8 u8SevIndxCpy)
+tenuErrorStatus SEV_enuEnable(const uint8 u8SevIndxCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -102,7 +102,7 @@ tenuErrorStatus SEV_enuEnable(uint8 u8SevIndxCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus SEV_enuDisable(uint8 u8SevIndxCpy)
+tenuErrorStatus SEV_enuDisable(const uint8 u8SevIndxCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -125,7 +125,7 @@ tenuErrorStatus SEV_enuDisable(uint8 u8SevIndxCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus SEV_enuToggle(uint8 u8SevIndxCpy)
+tenuErrorStatus SEV_enuToggle(const uint8 u8SevIndxCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
