@@ -68,6 +68,7 @@ tenuErrorStatus SEV_enuDisplayNum(const uint8 u8SevIndxCpy, const uint8 u8NumCpy
         if(astrSevConfigGlb[u8SevIndxCpy].u8CommonType==SEV_COMMON_CATHODE)
         {
             u8PortValueLoc |= au8DisplayPatternsGlb[u8NumCpy];
+            CLR_BIT(u8PortValueLoc,7);
         }
         else if(astrSevConfigGlb[u8SevIndxCpy].u8CommonType==SEV_COMMON_ANODE)
         {

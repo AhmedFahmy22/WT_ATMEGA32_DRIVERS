@@ -12,6 +12,5 @@
 #include "SEV_private.h"
 
 tstrSevSeg astrSevConfigGlb[SEV_MAX_NUM] = {
-        {SEV_PORTC, SEV_COMMON_CATHODE, SEV_STATE_OFF, 0},
-        {SEV_PORTD, SEV_COMMON_CATHODE, SEV_STATE_OFF, 0}
+        {SEV_PORTB, SEV_COMMON_CATHODE, SEV_STATE_OFF, 0},
 };
