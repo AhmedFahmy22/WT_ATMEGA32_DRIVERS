@@ -11,8 +11,8 @@
 
 tenuErrorStatus KEYPAD_enuInit(void);
 
-tenuErrorStatus KEYPAD_enuGetKey_0(uint8* pu8KeyNumCpy);
+tenuErrorStatus KEYPAD_enuGetKey_0(uint8* const pu8KeyNumCpy);
 
-tenuErrorStatus KEYPAD_enuGetKey_1(uint8* pu8KeyNumCpy);
+tenuErrorStatus KEYPAD_enuGetKey_1(uint8* const pu8KeyNumCpy);
 
 #endif
