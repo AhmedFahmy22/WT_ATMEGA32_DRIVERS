@@ -7,7 +7,7 @@
 #ifndef KEYPAD_INTERFACE_H_
 #define KEYPAD_INTERFACE_H_
 
-#include "STD_Types.h"
+#include "../../LIB/STD_Types.h"
 
 tenuErrorStatus KEYPAD_enuInit(void);
 

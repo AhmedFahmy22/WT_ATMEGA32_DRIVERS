@@ -4,8 +4,8 @@
 /* Version : 1.0                                                 */
 /* Date    : 12 Dec 2023                                         */
 /*****************************************************************/
-#include "STD_Types.h"
-#include "DIO_interface.h"
+#include "../../LIB/STD_Types.h"
+#include "../../MCAL/DIO/DIO_interface.h"
 #include "util/delay.h"
 
 #include "KEYPAD_interface.h"
