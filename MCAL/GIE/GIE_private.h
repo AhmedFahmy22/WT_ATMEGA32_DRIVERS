@@ -8,7 +8,7 @@
 #ifndef GIE_PRIVATE_H_
 #define GIE_PRIVATE_H_
 
-#define SREG_I_BIT 7
+#define SREG_BIT_I 7
 
 #define SREG (*((volatile uint8*)0x5F))
 

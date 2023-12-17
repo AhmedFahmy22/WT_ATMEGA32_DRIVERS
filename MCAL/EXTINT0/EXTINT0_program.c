@@ -16,19 +16,19 @@ pf pfExtint0ISRGlb = NULL_PTR;
 
 void EXTINT0_voidInit(void)
 {
-#if EXTINT0_MODE == EXTINT0_MODE_LOW
-	CLR_BIT(MCUCR,ISC00);
-	CLR_BIT(MCUCR,ISC01);
-#elif EXTINT0_MODE == EXTINT0_MODE_ON_CHANGE
-	SET_BIT(MCUCR,ISC00);
-	CLR_BIT(MCUCR,ISC01);
-#elif EXTINT0_MODE == EXTINT0_MODE_FALLING
-	CLR_BIT(MCUCR,ISC00);
-	SET_BIT(MCUCR,ISC01);
-#elif EXTINT0_MODE == EXTINT0_MODE_RISING
-	SET_BIT(MCUCR,ISC00);
-	SET_BIT(MCUCR,ISC01);
-#endif
+    #if EXTINT0_MODE == EXTINT0_MODE_LOW
+	CLR_BIT(MCUCR,MCUCR_BIT_ISC00);
+	CLR_BIT(MCUCR,MCUCR_BIT_ISC01);
+    #elif EXTINT0_MODE == EXTINT0_MODE_ON_CHANGE
+	SET_BIT(MCUCR,MCUCR_BIT_ISC00);
+	CLR_BIT(MCUCR,MCUCR_BIT_ISC01);
+    #elif EXTINT0_MODE == EXTINT0_MODE_FALLING
+	CLR_BIT(MCUCR,MCUCR_BIT_ISC00);
+	SET_BIT(MCUCR,MCUCR_BIT_ISC01);
+    #elif EXTINT0_MODE == EXTINT0_MODE_RISING
+	SET_BIT(MCUCR,MCUCR_BIT_ISC00);
+	SET_BIT(MCUCR,MCUCR_BIT_ISC01);
+    #endif
 }
 
 void EXTINT0_voidEnable(void)
@@ -41,6 +41,34 @@ void EXTINT0_voidDisable(void)
     CLR_BIT(GICR, INT0);
 }
 
+tenuErrorStatus EXTINT0_enuSetMode(uint8 u8ModeCpy)
+{
+    tenuErrorStatus enuErrorStatLoc = E_OK;
+
+    switch(u8ModeCpy)
+    {
+        case EXTINT0_MODE_LOW:
+        CLR_BIT(MCUCR,MCUCR_BIT_ISC00);
+    	CLR_BIT(MCUCR,MCUCR_BIT_ISC01);
+        break;
+        case EXTINT0_MODE_ON_CHANGE:
+        SET_BIT(MCUCR,MCUCR_BIT_ISC00);
+    	CLR_BIT(MCUCR,MCUCR_BIT_ISC01);
+        break;
+        case EXTINT0_MODE_FALLING:
+        CLR_BIT(MCUCR,MCUCR_BIT_ISC00);
+    	SET_BIT(MCUCR,MCUCR_BIT_ISC01);
+        break;
+        case EXTINT0_MODE_RISING:
+        SET_BIT(MCUCR,MCUCR_BIT_ISC00);
+    	SET_BIT(MCUCR,MCUCR_BIT_ISC01);
+        break;
+        default:
+        enuErrorStatLoc = E_NOK_PARAMETER_OUT_OF_RANGE;
+        break;
+    }
+    return enuErrorStatLoc;
+}
 
 tenuErrorStatus EXTINT0_enuSetCallBack(pf pfExtint0FunCpy)
 {

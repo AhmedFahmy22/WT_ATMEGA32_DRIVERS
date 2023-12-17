@@ -17,9 +17,9 @@ pf pfExtint2ISRGlb = NULL_PTR;
 void EXTINT2_voidInit(void)
 {
 #if EXTINT2_MODE == EXTINT2_MODE_FALLING
-	CLR_BIT(MCUCSR,ISC2);
+	CLR_BIT(MCUCSR,MCUCSR_BIT_ISC2);
 #elif EXTINT2_MODE == EXTINT2_MODE_RISING
-	SET_BIT(MCUCSR,ISC2);
+	SET_BIT(MCUCSR,MCUCSR_BIT_ISC2);
 #endif
 }
 
@@ -33,6 +33,24 @@ void EXTINT2_voidDisable(void)
     CLR_BIT(GICR, INT2);
 }
 
+tenuErrorStatus EXTINT2_enuSetMode(uint8 u8ModeCpy)
+{
+    tenuErrorStatus enuErrorStatLoc = E_OK;
+
+    switch(u8ModeCpy)
+    {
+        case EXTINT2_MODE_FALLING:
+        CLR_BIT(MCUCSR,MCUCSR_BIT_ISC2);
+        break;
+        case EXTINT2_MODE_RISING:
+        SET_BIT(MCUCSR,MCUCSR_BIT_ISC2);
+        break;
+        default:
+        enuErrorStatLoc = E_NOK_PARAMETER_OUT_OF_RANGE;
+        break;
+    }
+    return enuErrorStatLoc;
+}
 
 tenuErrorStatus EXTINT2_enuSetCallBack(pf pfExtint2FunCpy)
 {
