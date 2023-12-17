@@ -19,5 +19,6 @@ tenuErrorStatus CLCD_enuSendCommand(const uint8 u8CmdCpy);
 tenuErrorStatus CLCD_enuWriteChar(const uint8 u8DataCpy);
 tenuErrorStatus CLCD_enuWriteString (const uint8* const pu8StringCpy, const uint8 u8LengthCpy);
 tenuErrorStatus CLCD_enuGotoxy (const uint8 u8LineNumCpy, const uint8 u8ColumnCpy);
+tenuErrorStatus CLCD_enuWriteNum(const sint16 s16DataCpy);
 
 #endif

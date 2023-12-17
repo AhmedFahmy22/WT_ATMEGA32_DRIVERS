@@ -52,8 +52,8 @@
 #define CLCD_CHAR_FONT CLCD_CHAR_FONT_5X7
 
 /*LCD Pins Configuration*/
-#define CLCD_DATAPORT       DIO_PORTA /*8 Pins for 8Bit Mode, First 4 Pins for 4Bit Mode*/
-#define CLCD_CONTROLPORT    DIO_PORTB
+#define CLCD_DATAPORT       DIO_PORTC /*8 Pins for 8Bit Mode, First 4 Pins for 4Bit Mode*/
+#define CLCD_CONTROLPORT    DIO_PORTA
 #define CLCD_RSPIN          DIO_PIN0
 #define CLCD_RWPIN          DIO_PIN1
 #define CLCD_EPIN           DIO_PIN2

@@ -212,3 +212,36 @@ tenuErrorStatus CLCD_enuGotoxy (const uint8 u8LineNumCpy, const uint8 u8ColumnCp
 	}
 	return enuErrorStatLoc;
 }
+
+tenuErrorStatus CLCD_enuWriteNum(const sint16 s16DataCpy)
+{
+	tenuErrorStatus enuErrorStatLoc = E_OK;
+	sint16 s16DataTempLoc = s16DataCpy;
+	sint16 s16DataInvertLoc = 0;
+	uint8 u8DataLengthLoc = 0;
+	uint8 u8CntrLoc;
+
+	do{
+		u8DataLengthLoc++;
+		s16DataInvertLoc += (s16DataTempLoc%10);
+		s16DataTempLoc /= 10;
+		s16DataInvertLoc*=10;
+	}while(s16DataTempLoc!=0);
+	s16DataInvertLoc/=10;
+	if(s16DataCpy<0)
+	{
+		enuErrorStatLoc|=CLCD_enuWriteChar('-');
+		if(s16DataInvertLoc<0)
+		{
+			s16DataInvertLoc *= -1;
+		}
+	}
+
+	for(u8CntrLoc=0; u8CntrLoc<u8DataLengthLoc; u8CntrLoc++)
+	{
+		enuErrorStatLoc |= CLCD_enuWriteChar((s16DataInvertLoc%10)+'0');
+		s16DataInvertLoc/=10;
+	}
+
+	return enuErrorStatLoc;
+}
