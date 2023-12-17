@@ -15,6 +15,8 @@ typedef float float32;
 typedef double float64;
 typedef long double float128;
 
+typedef void (*pf)(void);
+
 #define NULL_PTR ((void*)0)
 
 typedef enum{
