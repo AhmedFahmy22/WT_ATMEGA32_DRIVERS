@@ -68,17 +68,24 @@ void ADC_voidDisable(void)
 tenuErrorStatus ADC_enuReadSynch (const uint8 u8ChannelCpy, uint16*const pu16DataCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
-    /*Channel*/
-    enuErrorStatLoc |= ADC_enuChangeChannel(u8ChannelCpy);
 
-    /*Start Conversion*/
-    SET_BIT(ADCSRA,ADCSRA_BIT_ADSC);
-    while(GET_BIT(ADCSRA,ADCSRA_BIT_ADIF)==0);
+    if(u8ChannelCpy>(~ADMUX_MUX04_MASK))
+    {
+        enuErrorStatLoc = E_NOK_PARAMETER_OUT_OF_RANGE;
+    }
+    else
+    {
+        /*Channel*/
+        ADMUX = (ADMUX & ADMUX_MUX04_MASK) | u8ChannelCpy;
 
-    /*Read Data*/
-    enuErrorStatLoc |= ADC_enuGetData(pu16DataCpy);
-    SET_BIT(ADCSRA,ADCSRA_BIT_ADIF);
+        /*Start Conversion*/
+        SET_BIT(ADCSRA,ADCSRA_BIT_ADSC);
+        while(GET_BIT(ADCSRA,ADCSRA_BIT_ADIF)==0);
 
+        /*Read Data*/
+        enuErrorStatLoc |= ADC_enuGetData(pu16DataCpy);
+        SET_BIT(ADCSRA,ADCSRA_BIT_ADIF);
+    }
     return enuErrorStatLoc;
 }
 
@@ -86,12 +93,18 @@ tenuErrorStatus ADC_enuReadAsynch(uint8 u8ChannelCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
-    /*Channel*/
-    ADMUX = (ADMUX & ADMUX_MUX04_MASK) | u8ChannelCpy;
+    if(u8ChannelCpy>(~ADMUX_MUX04_MASK))
+    {
+        enuErrorStatLoc = E_NOK_PARAMETER_OUT_OF_RANGE;
+    }
+    else
+    {
+        /*Channel*/
+        ADMUX = (ADMUX & ADMUX_MUX04_MASK) | u8ChannelCpy;
 
-    /*Start Conversion*/
-    SET_BIT(ADCSRA,ADCSRA_BIT_ADSC);
-
+        /*Start Conversion*/
+        SET_BIT(ADCSRA,ADCSRA_BIT_ADSC);
+    }
     return enuErrorStatLoc;
 }
 
