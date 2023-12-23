@@ -3,7 +3,7 @@
 /* Layer   : MCAL                                                */
 /* SWC     : TIMER0                                              */
 /* Version : 1.0                                                 */
-/* Date    : 19 Dec 2023                                         */
+/* Date    : 24 Dec 2023                                         */
 /*****************************************************************/
 #ifndef TIMER0_PRIVATE_H_
 #define TIMER0_PRIVATE_H_
@@ -67,5 +67,8 @@
 
 #define TIMER0_INTERRUPT_CM_MODE_DISABLE 0
 #define TIMER0_INTERRUPT_CM_MODE_ENABLE  1
+
+#define TIMER0_OC0_PORT DIO_PORTB
+#define TIMER0_OC0_PIN  DIO_PIN3
 
 #endif

@@ -3,7 +3,7 @@
 /* Layer   : MCAL                                                */
 /* SWC     : ADC                                                 */
 /* Version : 1.0                                                 */
-/* Date    : 18 Dec 2023                                         */
+/* Date    : 24 Dec 2023                                         */
 /*****************************************************************/
 #ifndef ADC_PRIVATE_H_
 #define ADC_PRIVATE_H_
@@ -70,6 +70,9 @@
 
 #define ADC_AUTO_TRIGGER_DISABLE 0
 #define ADC_AUTO_TRIGGER_ENABLE  1
+
+#define ADC_INTERRUPT_DISABLE 0
+#define ADC_INTERRUPT_ENABLE  1
 
 #define ADC_AT_SOURCE_FREE_RUNNING      0
 #define ADC_AT_SOURCE_ANALOG_COMPARATOR 1

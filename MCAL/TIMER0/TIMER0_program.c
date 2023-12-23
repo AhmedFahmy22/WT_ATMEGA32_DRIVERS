@@ -3,7 +3,7 @@
 /* Layer   : MCAL                                                */
 /* SWC     : TIMER0                                              */
 /* Version : 1.0                                                 */
-/* Date    : 19 Dec 2023                                         */
+/* Date    : 24 Dec 2023                                         */
 /*****************************************************************/
 #include "../../LIB/STD_Types.h"
 #include "../../LIB/BIT_Math.h"
@@ -48,9 +48,9 @@ void TIMER0_voidInit(void)
     #endif
 
     /*Direction of OC0 pin*/
-    if((GET_BIT(TCCR0, TCCR0_BIT_COM00)|(GET_BIT(TCCR0, TCCR0_BIT_COM01)<<1))!=0)
+    if((TCCR0 & ((uint8) ~TCCR0_COM001_MASK))!=0)
     {
-        DIO_enuSetPinDirection(DIO_PORTB, DIO_PIN3, DIO_OUTPUT);
+        DIO_enuSetPinDirection(TIMER0_OC0_PORT, TIMER0_OC0_PIN, DIO_OUTPUT);
     }
 
     /*Clock Prescaler*/
@@ -71,7 +71,7 @@ void TIMER0_voidInit(void)
 
 }
 
-tenuErrorStatus TIMER0_enuEnable(uint8 u8ClkPrescalerCpy)
+tenuErrorStatus TIMER0_enuEnable(const uint8 u8ClkPrescalerCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
     if(u8ClkPrescalerCpy>7)
@@ -85,12 +85,12 @@ tenuErrorStatus TIMER0_enuEnable(uint8 u8ClkPrescalerCpy)
     return enuErrorStatLoc;
 }
 
-void TIMER0_voidSetTimerValue(uint8 u8TimerValueCpy)
+void TIMER0_voidSetTimerValue(const uint8 u8TimerValueCpy)
 {
     TCNT0 = u8TimerValueCpy;
 }
 
-tenuErrorStatus TIMER0_enuGetTimerValue(uint8* pu8TimerValueCpy)
+tenuErrorStatus TIMER0_enuGetTimerValue(uint8* const pu8TimerValueCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
     if(pu8TimerValueCpy==NULL_PTR)
@@ -104,7 +104,7 @@ tenuErrorStatus TIMER0_enuGetTimerValue(uint8* pu8TimerValueCpy)
     return enuErrorStatLoc;
 }
 
-void TIMER0_voidSetCmpMatchValue(uint8 u8CmpMatchValueCpy)
+void TIMER0_voidSetCmpMatchValue(const uint8 u8CmpMatchValueCpy)
 {
     OCR0 = u8CmpMatchValueCpy;
 }
@@ -159,10 +159,16 @@ tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(pf pfCmpMatchISRCpy)
 
 void __vector_10 (void) __attribute__ ((signal,used, externally_visible)) ; \
 void __vector_10 (void){
-	pfCmpMatchISRGlb();
+    if(pfCmpMatchISRCpy!=NULL_PTR)
+    {
+        pfCmpMatchISRGlb();
+    }
 }
 
 void __vector_11 (void) __attribute__ ((signal,used, externally_visible)) ; \
 void __vector_11 (void){
-	pfOvfISRGlb();
+    if(pfOvfISRGlb!=NULL_PTR)
+    {
+        pfOvfISRGlb();
+    }
 }

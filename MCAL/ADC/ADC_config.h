@@ -3,12 +3,12 @@
 /* Layer   : MCAL                                                */
 /* SWC     : ADC                                                 */
 /* Version : 1.0                                                 */
-/* Date    : 18 Dec 2023                                         */
+/* Date    : 24 Dec 2023                                         */
 /*****************************************************************/
 #ifndef ADC_CONFIG_H_
 #define ADC_CONFIG_H_
 
-#define ADC_STATE ADC_STATE_ENABLE
+#define ADC_STATE ADC_STATE_DISABLE
 /* Options
 * ADC_STATE_DISABLE
 * ADC_STATE_ENABLE
@@ -39,19 +39,19 @@
 * ADC_DATA_ADJUST_LEFT
 */
 
-#define ADC_AUTO_TRIGGER ADC_AUTO_TRIGGER_DISABLE
+#define ADC_AUTO_TRIGGER ADC_AUTO_TRIGGER_ENABLE
 /* Options
 * ADC_AUTO_TRIGGER_DISABLE
 * ADC_AUTO_TRIGGER_ENABLE
 */
 
-#define ADC_INTERRUPT ADC_INTERRUPT_DISABLE
+#define ADC_INTERRUPT ADC_INTERRUPT_ENABLE
 /* Options
 * ADC_INTERRUPT_DISABLE
 * ADC_INTERRUPT_ENABLE
 */
 
-#define ADC_AT_SOURCE  ADC_AT_SOURCE_FREE_RUNNING
+#define ADC_AT_SOURCE  ADC_AT_SOURCE_TIMER0_OVF
 /* Options
 * ADC_AT_SOURCE_FREE_RUNNING
 * ADC_AT_SOURCE_ANALOG_COMPARATOR

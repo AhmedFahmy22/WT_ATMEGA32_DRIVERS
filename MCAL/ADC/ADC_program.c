@@ -3,7 +3,7 @@
 /* Layer   : MCAL                                                */
 /* SWC     : ADC                                                 */
 /* Version : 1.0                                                 */
-/* Date    : 18 Dec 2023                                         */
+/* Date    : 24 Dec 2023                                         */
 /*****************************************************************/
 #include "../../LIB/STD_Types.h"
 #include "../../LIB/BIT_Math.h"
@@ -69,7 +69,7 @@ tenuErrorStatus ADC_enuReadSynch (const uint8 u8ChannelCpy, uint16*const pu16Dat
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
-    if(u8ChannelCpy>(~ADMUX_MUX04_MASK))
+    if(u8ChannelCpy>ADC_CHANNEL_A7)
     {
         enuErrorStatLoc = E_NOK_PARAMETER_OUT_OF_RANGE;
     }
@@ -93,7 +93,7 @@ tenuErrorStatus ADC_enuReadAsynch(uint8 u8ChannelCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
-    if(u8ChannelCpy>(~ADMUX_MUX04_MASK))
+    if(u8ChannelCpy>ADC_CHANNEL_A7)
     {
         enuErrorStatLoc = E_NOK_PARAMETER_OUT_OF_RANGE;
     }
@@ -128,7 +128,7 @@ tenuErrorStatus ADC_enuGetData(uint16*const pu16DataCpy)
 tenuErrorStatus ADC_enuChangeChannel(const uint8 u8ChannelCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
-    if(u8ChannelCpy>(~ADMUX_MUX04_MASK))
+    if(u8ChannelCpy>ADC_CHANNEL_A7)
     {
         enuErrorStatLoc = E_NOK_PARAMETER_OUT_OF_RANGE;
     }
@@ -164,7 +164,10 @@ tenuErrorStatus ADC_enuSetCallBack(pf pfAdcISRCpy)
     return enuErrorStatLoc;
 }
 
-void __vector_16 (void) __attribute__ ((signal,used, externally_visible)) ; \
+void __vector_16 (void) __attribute__ ((signal,used)) ; \
 void __vector_16 (void){
-	pfAdcISRGlb();
+	if(pfAdcISRGlb!=NULL_PTR)
+	{
+		pfAdcISRGlb();
+	}
 }

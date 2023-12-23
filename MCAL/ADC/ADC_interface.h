@@ -3,7 +3,7 @@
 /* Layer   : MCAL                                                */
 /* SWC     : ADC                                                 */
 /* Version : 1.0                                                 */
-/* Date    : 18 Dec 2023                                         */
+/* Date    : 24 Dec 2023                                         */
 /*****************************************************************/
 #ifndef ADC_INTERFACE_H_
 #define ADC_INTERFACE_H_
