@@ -143,12 +143,13 @@ void ADC_voidInterruptEnable(void)
 {
     SET_BIT(ADCSRA, ADCSRA_BIT_ADIE);
 }
+
 void ADC_voidInterruptDisble(void)
 {
     CLR_BIT(ADCSRA, ADCSRA_BIT_ADIE);
 }
 
-tenuErrorStatus ADC_enuSetCallBack(pf pfAdcISRCpy)
+tenuErrorStatus ADC_enuSetCallBack(const pf pfAdcISRCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -164,7 +165,7 @@ tenuErrorStatus ADC_enuSetCallBack(pf pfAdcISRCpy)
     return enuErrorStatLoc;
 }
 
-void __vector_16 (void) __attribute__ ((signal,used)) ; \
+void __vector_16 (void) __attribute__ ((signal,used)) ;
 void __vector_16 (void){
 	if(pfAdcISRGlb!=NULL_PTR)
 	{

@@ -14,8 +14,8 @@ void EXTINT0_voidEnable(void);
 
 void EXTINT0_voidDisable(void);
 
-tenuErrorStatus EXTINT0_enuSetMode(uint8 u8ModeCpy);
+tenuErrorStatus EXTINT0_enuSetMode(const uint8 u8ModeCpy);
 
-tenuErrorStatus EXTINT0_enuSetCallBack(pf pfExtint0FunCpy);
+tenuErrorStatus EXTINT0_enuSetCallBack(const pf pfExtint0FunCpy);
 
 #endif

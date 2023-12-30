@@ -28,6 +28,6 @@ tenuErrorStatus ADC_enuGetData(uint16*const pu16DataCpy);
 tenuErrorStatus ADC_enuChangeChannel(const uint8 u8ChannelCpy);
 void ADC_voidInterruptEnable(void);
 void ADC_voidInterruptDisble(void);
-tenuErrorStatus ADC_enuSetCallBack(pf pfAdcISRCpy);
+tenuErrorStatus ADC_enuSetCallBack(const pf pfAdcISRCpy);
 
 #endif

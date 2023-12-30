@@ -26,8 +26,8 @@ void TIMER0_voidIntCmpMatchEnable(void);
 
 void TIMER0_voidIntCmpMatchDisable(void);
 
-tenuErrorStatus TIMER0_enuSetCallBackOvf(pf pfOvfISRCpy);
+tenuErrorStatus TIMER0_enuSetCallBackOvf(const pf pfOvfISRCpy);
 
-tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(pf pfCmpMatchISRCpy);
+tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(const pf pfCmpMatchISRCpy);
 
 #endif

@@ -33,7 +33,7 @@ void EXTINT2_voidDisable(void)
     CLR_BIT(GICR, INT2);
 }
 
-tenuErrorStatus EXTINT2_enuSetMode(uint8 u8ModeCpy)
+tenuErrorStatus EXTINT2_enuSetMode(const uint8 u8ModeCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -52,7 +52,7 @@ tenuErrorStatus EXTINT2_enuSetMode(uint8 u8ModeCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus EXTINT2_enuSetCallBack(pf pfExtint2FunCpy)
+tenuErrorStatus EXTINT2_enuSetCallBack(const pf pfExtint2FunCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
     if(pfExtint2FunCpy == NULL_PTR)
@@ -70,5 +70,8 @@ tenuErrorStatus EXTINT2_enuSetCallBack(pf pfExtint2FunCpy)
 
 void __vector_3 (void) __attribute__ ((signal,used, externally_visible)) ; \
 void __vector_3 (void){
-	pfExtint2ISRGlb();
+    if(pfExtint2ISRGlb != NULL_PTR)
+    {
+        pfExtint2ISRGlb();
+    }
 }

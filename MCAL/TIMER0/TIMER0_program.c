@@ -129,7 +129,7 @@ void TIMER0_voidIntCmpMatchDisable(void)
     CLR_BIT(TIMSK, TIMSK_BIT_OCIE0);
 }
 
-tenuErrorStatus TIMER0_enuSetCallBackOvf(pf pfOvfISRCpy)
+tenuErrorStatus TIMER0_enuSetCallBackOvf(const pf pfOvfISRCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
     if(pfOvfISRCpy==NULL_PTR)
@@ -143,7 +143,7 @@ tenuErrorStatus TIMER0_enuSetCallBackOvf(pf pfOvfISRCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(pf pfCmpMatchISRCpy)
+tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(const pf pfCmpMatchISRCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
     if(pfCmpMatchISRCpy==NULL_PTR)
@@ -159,7 +159,7 @@ tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(pf pfCmpMatchISRCpy)
 
 void __vector_10 (void) __attribute__ ((signal,used, externally_visible)) ; \
 void __vector_10 (void){
-    if(pfCmpMatchISRCpy!=NULL_PTR)
+    if(pfCmpMatchISRGlb!=NULL_PTR)
     {
         pfCmpMatchISRGlb();
     }
