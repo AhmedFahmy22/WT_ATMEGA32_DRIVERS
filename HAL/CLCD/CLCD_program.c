@@ -3,9 +3,10 @@
 /* Layer   : HAL                                                 */
 /* SWC     : CLCD                                                */
 /* Version : 1.0                                                 */
-/* Date    : 11 Dec 2023                                         */
+/* Date    : 10 JAN 2024                                         */
 /*****************************************************************/
 #include "../../LIB/STD_Types.h"
+#include "../../LIB/BIT_Math.h"
 #include "../../MCAL/DIO/DIO_interface.h"
 
 #include <util/delay.h>
@@ -15,22 +16,19 @@
 #include "CLCD_config.h"
 #include "CLCD_extra.h"
 
+/*Static helper functions*/
+static tenuErrorStatus CLCD_enuWriteData_Helper(const uint8 u8DataCpy);
+
+/*Functions Implementation*/
 tenuErrorStatus CLCD_enuInit(void)
 {
 	tenuErrorStatus enuErrorStatLoc = E_OK;
-	uint8 u8CommLoc, u8PortDirLoc, u8CntrLoc1, u8CntrLoc2;
+	uint8 u8CommLoc, u8CntrLoc1, u8CntrLoc2;
 
 #if CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_8BIT
-	/*Set Data Port to Output*/
-	enuErrorStatLoc|=DIO_enuSetPortDirection(CLCD_DATAPORT, 0xFF);
-	/*Set Control Pins to Output*/
-	enuErrorStatLoc|=DIO_enuSetPinDirection(CLCD_CONTROLPORT, CLCD_RSPIN, DIO_OUTPUT);
-	enuErrorStatLoc|=DIO_enuSetPinDirection(CLCD_CONTROLPORT, CLCD_RWPIN, DIO_OUTPUT);
-	enuErrorStatLoc|=DIO_enuSetPinDirection(CLCD_CONTROLPORT, CLCD_EPIN, DIO_OUTPUT);
 	/*Write Low on Enable Pin*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 	/*8-Bit initialization*/
-	_delay_ms(30);
 	u8CommLoc = 0b00110000 | (CLCD_LINES_NUM<<3) | (CLCD_CHAR_FONT<<2);
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
 	_delay_ms(5);
@@ -43,21 +41,14 @@ tenuErrorStatus CLCD_enuInit(void)
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
 	_delay_ms(5);
 #elif  CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_4BIT
-	/*Set Data Port to Output*/
-	enuErrorStatLoc|=DIO_enuGetPortDirection(CLCD_DATAPORT, &u8PortDirLoc);
-	enuErrorStatLoc|=DIO_enuSetPortDirection(CLCD_DATAPORT, u8PortDirLoc|0x0F);
-	/*Set Control Pins to Output*/
-	enuErrorStatLoc|=DIO_enuSetPinDirection(CLCD_CONTROLPORT, CLCD_RSPIN, DIO_OUTPUT);
-	enuErrorStatLoc|=DIO_enuSetPinDirection(CLCD_CONTROLPORT, CLCD_RWPIN, DIO_OUTPUT);
-	enuErrorStatLoc|=DIO_enuSetPinDirection(CLCD_CONTROLPORT, CLCD_EPIN, DIO_OUTPUT);
 	/*Write Low on Enable Pin*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 	/*4-Bit initialization*/
 	u8CommLoc = 0b00100010;
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
-	enuErrorStatLoc|=DIO_enuReadPortValue(CLCD_DATAPORT, &u8CommLoc);
-	u8CommLoc = u8CommLoc | (CLCD_LINES_NUM<<3) | (CLCD_CHAR_FONT<<2);
-	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, u8CommLoc);
+	_delay_ms(1);
+	u8CommLoc = 0 | (CLCD_LINES_NUM<<3) | (CLCD_CHAR_FONT<<2);
+	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CommLoc);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
 	_delay_ms(5);
@@ -70,8 +61,6 @@ tenuErrorStatus CLCD_enuInit(void)
 	_delay_ms(2);
 	u8CommLoc = 0b00000100 | (CLCD_CURSOR_MOVE<<1) | (CLCD_DISPLAY_SHIFT);
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
-	_delay_ms(1);
-
 #endif
     /*Load Custom Characters*/
     enuErrorStatLoc|=CLCD_enuSendCommand(0x40);
@@ -91,7 +80,6 @@ tenuErrorStatus CLCD_enuInit(void)
 tenuErrorStatus CLCD_enuSendCommand(const uint8 u8CmdCpy)
 {
 	tenuErrorStatus enuErrorStatLoc = E_OK;
-	uint8 u8PortValueLoc;
 
 	/*Rs: Low (Command)*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_RSPIN, DIO_LOW);
@@ -104,23 +92,21 @@ tenuErrorStatus CLCD_enuSendCommand(const uint8 u8CmdCpy)
 
 #if CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_8BIT
 	/*Write Command on Data Port*/
-	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, u8CmdCpy);
+	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CmdCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
 	_delay_ms(5);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 #elif CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_4BIT
-	/*Write Command on Data Port*/
-	enuErrorStatLoc|=DIO_enuReadPortValue(CLCD_DATAPORT, &u8PortValueLoc);
-	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, (u8PortValueLoc&0xF0)|((u8CmdCpy>>4)&0x0F));
+	/*Write Command(High Nibble) on Data Port*/
+	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CmdCpy>>4);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
 	_delay_ms(5);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
-
-	/*Write Command on Data Port*/
-	enuErrorStatLoc|=DIO_enuReadPortValue(CLCD_DATAPORT, &u8PortValueLoc);
-	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, (u8PortValueLoc&0xF0)|(u8CmdCpy&0x0F));
+    _delay_ms(1);
+	/*Write Command(low Nibble) on Data Port*/
+	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CmdCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
 	_delay_ms(5);
@@ -132,7 +118,6 @@ tenuErrorStatus CLCD_enuSendCommand(const uint8 u8CmdCpy)
 tenuErrorStatus CLCD_enuWriteChar(const uint8 u8DataCpy)
 {
 	tenuErrorStatus enuErrorStatLoc = E_OK;
-	uint8 u8PortValueLoc;
 
 	/*Rs: High (Data)*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_RSPIN, DIO_HIGH);
@@ -144,24 +129,22 @@ tenuErrorStatus CLCD_enuWriteChar(const uint8 u8DataCpy)
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 
 #if CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_8BIT
-	/*Write Command on Data Port*/
+	/*Write Data on Data Port*/
 	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, u8DataCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
 	_delay_ms(5);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 #elif CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_4BIT
-	/*Write Command on Data Port*/
-	enuErrorStatLoc|=DIO_enuReadPortValue(CLCD_DATAPORT, &u8PortValueLoc);
-	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, (u8PortValueLoc&0xF0)|((u8DataCpy>>4)&0x0F));
+	/*Write Data(High Nibble) on Data Port*/
+	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8DataCpy>>4);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
 	_delay_ms(5);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
-
-	/*Write Command on Data Port*/
-	enuErrorStatLoc|=DIO_enuReadPortValue(CLCD_DATAPORT, &u8PortValueLoc);
-	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, (u8PortValueLoc&0xF0)|(u8DataCpy&0x0F));
+    _delay_ms(1);
+	/*Write Data(Low Nibble) on Data Port*/
+	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8DataCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
 	_delay_ms(5);
@@ -245,4 +228,27 @@ tenuErrorStatus CLCD_enuWriteNum(const sint16 s16DataCpy)
 	}
 
 	return enuErrorStatLoc;
+}
+
+static tenuErrorStatus CLCD_enuWriteData_Helper(const uint8 u8DataCpy)
+{
+    tenuErrorStatus enuErrorStatLoc = E_OK;
+
+    #if CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_8BIT
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D0_PORT, CLCD_D0_PIN, GET_BIT(u8DataCpy,0));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D1_PORT, CLCD_D1_PIN, GET_BIT(u8DataCpy,1));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D2_PORT, CLCD_D2_PIN, GET_BIT(u8DataCpy,2));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D3_PORT, CLCD_D3_PIN, GET_BIT(u8DataCpy,3));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D4_PORT, CLCD_D4_PIN, GET_BIT(u8DataCpy,4));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D5_PORT, CLCD_D5_PIN, GET_BIT(u8DataCpy,5));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D6_PORT, CLCD_D6_PIN, GET_BIT(u8DataCpy,6));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D7_PORT, CLCD_D7_PIN, GET_BIT(u8DataCpy,7));
+    #elif CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_4BIT
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D4_PORT, CLCD_D4_PIN, GET_BIT(u8DataCpy,0));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D5_PORT, CLCD_D5_PIN, GET_BIT(u8DataCpy,1));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D6_PORT, CLCD_D6_PIN, GET_BIT(u8DataCpy,2));
+    enuErrorStatLoc |= DIO_enuWritePinValue(CLCD_D7_PORT, CLCD_D7_PIN, GET_BIT(u8DataCpy,3));
+    #endif
+
+    return enuErrorStatLoc;
 }

@@ -3,7 +3,7 @@
 /* Layer   : HAL                                                 */
 /* SWC     : CLCD                                                */
 /* Version : 1.0                                                 */
-/* Date    : 11 Dec 2023                                         */
+/* Date    : 10 JAN 2024                                         */
 /*****************************************************************/
 #ifndef CLCD_INTERFACE_H_
 #define CLCD_INTERFACE_H_
