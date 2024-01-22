@@ -18,8 +18,8 @@ tenuErrorStatus USART_enuGetData(uint16* const pu16DataCpy);
 
 tenuErrorStatus USART_enuSetData(const uint16 u16DataCpy);
 
-tenuErrorStatus USAR_enuReceiveSetCallBack(pf pfReceiveISRCpy);
+tenuErrorStatus USART_enuReceiveSetCallBack(pf pfReceiveISRCpy);
 
-tenuErrorStatus USAR_enuTransmitSetCallBack(pf pfTransmitISRCpy);
+tenuErrorStatus USART_enuTransmitSetCallBack(pf pfTransmitISRCpy);
 
 #endif

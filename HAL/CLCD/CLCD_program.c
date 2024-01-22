@@ -7,9 +7,10 @@
 /*****************************************************************/
 #include "../../LIB/STD_Types.h"
 #include "../../LIB/BIT_Math.h"
+
 #include "../../MCAL/DIO/DIO_interface.h"
 
-#include <util/delay.h>
+#include "../../MCAL/TIMER0/TIMER0_interface.h"
 
 #include "CLCD_interface.h"
 #include "CLCD_private.h"
@@ -19,7 +20,7 @@
 /*Static helper functions*/
 static tenuErrorStatus CLCD_enuWriteData_Helper(const uint8 u8DataCpy);
 
-/*Functions Implementation*/
+/*Function Implementation*/
 tenuErrorStatus CLCD_enuInit(void)
 {
 	tenuErrorStatus enuErrorStatLoc = E_OK;
@@ -31,49 +32,45 @@ tenuErrorStatus CLCD_enuInit(void)
 	/*8-Bit initialization*/
 	u8CommLoc = 0b00110000 | (CLCD_LINES_NUM<<3) | (CLCD_CHAR_FONT<<2);
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	u8CommLoc = 0b00001100 | (CLCD_CURSOR_DISPLAY<<1) | (CLCD_CURSOR_BLINK);
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=CLCD_enuSendCommand(CLCD_COMM_CLEAR);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	u8CommLoc = 0b00000100 | (CLCD_CURSOR_MOVE<<1) | (CLCD_DISPLAY_SHIFT);
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 #elif  CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_4BIT
 	/*Write Low on Enable Pin*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 	/*4-Bit initialization*/
 	u8CommLoc = 0b00100010;
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
-	_delay_ms(1);
 	u8CommLoc = 0 | (CLCD_LINES_NUM<<3) | (CLCD_CHAR_FONT<<2);
 	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CommLoc);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
-	_delay_ms(1);
 	u8CommLoc = 0b00001100 | (CLCD_CURSOR_DISPLAY<<1) | (CLCD_CURSOR_BLINK);
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
-	_delay_ms(1);
 	enuErrorStatLoc|=CLCD_enuSendCommand(CLCD_COMM_CLEAR);
-	_delay_ms(2);
 	u8CommLoc = 0b00000100 | (CLCD_CURSOR_MOVE<<1) | (CLCD_DISPLAY_SHIFT);
 	enuErrorStatLoc|=CLCD_enuSendCommand(u8CommLoc);
 #endif
     /*Load Custom Characters*/
     enuErrorStatLoc|=CLCD_enuSendCommand(0x40);
-    _delay_ms(5);
-    for(u8CntrLoc1=0;u8CntrLoc1<7;u8CntrLoc1++)
+    TIMER0_voidDelay(1);
+    for(u8CntrLoc1=0;u8CntrLoc1<CLCD_CUSTOM_CHAR_NUM;u8CntrLoc1++)
     {
         for(u8CntrLoc2=0;u8CntrLoc2<8;u8CntrLoc2++)
         {
             enuErrorStatLoc|=CLCD_enuWriteChar(au8CharGlb[u8CntrLoc1][u8CntrLoc2]);
-            _delay_ms(5);
+            TIMER0_voidDelay(1);
         }
     }
-    enuErrorStatLoc|=CLCD_enuSendCommand(0x88);
+    enuErrorStatLoc|=CLCD_enuSendCommand(0x80);
 	return enuErrorStatLoc;
 }
 
@@ -95,21 +92,20 @@ tenuErrorStatus CLCD_enuSendCommand(const uint8 u8CmdCpy)
 	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CmdCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 #elif CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_4BIT
 	/*Write Command(High Nibble) on Data Port*/
 	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CmdCpy>>4);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
-    _delay_ms(1);
 	/*Write Command(low Nibble) on Data Port*/
 	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8CmdCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 #endif
 	return enuErrorStatLoc;
@@ -130,42 +126,42 @@ tenuErrorStatus CLCD_enuWriteChar(const uint8 u8DataCpy)
 
 #if CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_8BIT
 	/*Write Data on Data Port*/
-	enuErrorStatLoc|=DIO_enuWritePortValue(CLCD_DATAPORT, u8DataCpy);
+	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8DataCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 #elif CLCD_DATA_LENGTH == CLCD_DATA_LENGTH_4BIT
 	/*Write Data(High Nibble) on Data Port*/
 	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8DataCpy>>4);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
-    _delay_ms(1);
 	/*Write Data(Low Nibble) on Data Port*/
 	enuErrorStatLoc|=CLCD_enuWriteData_Helper(u8DataCpy);
 	/*Enable Sequence*/
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_HIGH);
-	_delay_ms(5);
+	TIMER0_voidDelay(1);
 	enuErrorStatLoc|=DIO_enuWritePinValue(CLCD_CONTROLPORT, CLCD_EPIN, DIO_LOW);
 #endif
 	return enuErrorStatLoc;
 }
 
-tenuErrorStatus CLCD_enuWriteString (const uint8* const pu8StringCpy, const uint8 u8LengthCpy)
+tenuErrorStatus CLCD_enuWriteString (const uint8* const pu8StringCpy)
 {
 	tenuErrorStatus enuErrorStatLoc = E_OK;
-	uint8 u8CntrLoc;
+	uint8 u8CntrLoc=0;
 	if(pu8StringCpy==NULL_PTR)
 	{
 		enuErrorStatLoc=E_NOK_NULL_POINTER;
 	}
 	else
 	{
-		for(u8CntrLoc=0;u8CntrLoc<u8LengthCpy;u8CntrLoc++)
+		while(*(pu8StringCpy+u8CntrLoc)!='\0')
 		{
-			enuErrorStatLoc|=CLCD_enuWriteChar(pu8StringCpy[u8CntrLoc]);
+			enuErrorStatLoc|=CLCD_enuWriteChar(*(pu8StringCpy+u8CntrLoc));
+			u8CntrLoc++;
 		}
 	}
 
@@ -197,34 +193,34 @@ tenuErrorStatus CLCD_enuGotoxy (const uint8 u8LineNumCpy, const uint8 u8ColumnCp
 	return enuErrorStatLoc;
 }
 
-tenuErrorStatus CLCD_enuWriteNum(const sint16 s16DataCpy)
+tenuErrorStatus CLCD_enuWriteNum(const sint32 s32DataCpy)
 {
 	tenuErrorStatus enuErrorStatLoc = E_OK;
-	sint16 s16DataTempLoc = s16DataCpy;
-	sint16 s16DataInvertLoc = 0;
+	sint32 s32DataTempLoc = s32DataCpy;
+	sint32 s32DataInvertLoc = 0;
 	uint8 u8DataLengthLoc = 0;
 	uint8 u8CntrLoc;
 
 	do{
 		u8DataLengthLoc++;
-		s16DataInvertLoc += (s16DataTempLoc%10);
-		s16DataTempLoc /= 10;
-		s16DataInvertLoc*=10;
-	}while(s16DataTempLoc!=0);
-	s16DataInvertLoc/=10;
-	if(s16DataCpy<0)
+		s32DataInvertLoc += (s32DataTempLoc%10);
+		s32DataTempLoc /= 10;
+		s32DataInvertLoc*=10;
+	}while(s32DataTempLoc!=0);
+	s32DataInvertLoc/=10;
+	if(s32DataCpy<0)
 	{
 		enuErrorStatLoc|=CLCD_enuWriteChar('-');
-		if(s16DataInvertLoc<0)
+		if(s32DataInvertLoc<0)
 		{
-			s16DataInvertLoc *= -1;
+			s32DataInvertLoc *= -1;
 		}
 	}
 
 	for(u8CntrLoc=0; u8CntrLoc<u8DataLengthLoc; u8CntrLoc++)
 	{
-		enuErrorStatLoc |= CLCD_enuWriteChar((s16DataInvertLoc%10)+'0');
-		s16DataInvertLoc/=10;
+		enuErrorStatLoc |= CLCD_enuWriteChar((s32DataInvertLoc%10)+'0');
+		s32DataInvertLoc/=10;
 	}
 
 	return enuErrorStatLoc;

@@ -46,7 +46,7 @@
 
 #define CLCD_SHIFT_PATTERN CLCD_SHIFT_PATTERN_CURSOR_RIGHT
 
-#define CLCD_DATA_LENGTH CLCD_DATA_LENGTH_4BIT
+#define CLCD_DATA_LENGTH CLCD_DATA_LENGTH_8BIT
 
 #define CLCD_LINES_NUM CLCD_LINES_NUM_2
 
@@ -61,28 +61,28 @@
 #define CLCD_EPIN           DIO_PIN4
 
 /*Data pins (Only D4 to D7 for 4-bit mode)*/
-#define CLCD_D0_PORT       DIO_PORTD
-#define CLCD_D0_PIN        DIO_PIN0
+#define CLCD_D0_PORT       DIO_PORTB
+#define CLCD_D0_PIN        DIO_PIN3
 
-#define CLCD_D1_PORT       DIO_PORTD
-#define CLCD_D1_PIN        DIO_PIN1
+#define CLCD_D1_PORT       DIO_PORTB
+#define CLCD_D1_PIN        DIO_PIN4
 
-#define CLCD_D2_PORT       DIO_PORTD
-#define CLCD_D2_PIN        DIO_PIN2
+#define CLCD_D2_PORT       DIO_PORTB
+#define CLCD_D2_PIN        DIO_PIN5
 
-#define CLCD_D3_PORT       DIO_PORTD
-#define CLCD_D3_PIN        DIO_PIN3
+#define CLCD_D3_PORT       DIO_PORTB
+#define CLCD_D3_PIN        DIO_PIN6
 
-#define CLCD_D4_PORT       DIO_PORTD
-#define CLCD_D4_PIN        DIO_PIN4
+#define CLCD_D4_PORT       DIO_PORTB
+#define CLCD_D4_PIN        DIO_PIN7
 
-#define CLCD_D5_PORT       DIO_PORTD
+#define CLCD_D5_PORT       DIO_PORTC
 #define CLCD_D5_PIN        DIO_PIN5
 
-#define CLCD_D6_PORT       DIO_PORTD
+#define CLCD_D6_PORT       DIO_PORTC
 #define CLCD_D6_PIN        DIO_PIN6
 
-#define CLCD_D7_PORT       DIO_PORTD
+#define CLCD_D7_PORT       DIO_PORTC
 #define CLCD_D7_PIN        DIO_PIN7
 
 

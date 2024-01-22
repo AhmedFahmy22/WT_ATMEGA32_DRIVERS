@@ -30,4 +30,6 @@ tenuErrorStatus TIMER0_enuSetCallBackOvf(const pf pfOvfISRCpy);
 
 tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(const pf pfCmpMatchISRCpy);
 
+void TIMER0_voidDelay(uint32 u32OvfDelayCpy);
+
 #endif

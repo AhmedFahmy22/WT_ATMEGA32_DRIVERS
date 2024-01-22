@@ -6,9 +6,9 @@
 /* Date    : 28 Dec 2023                                         */
 /*****************************************************************/
 #include "../../LIB/STD_Types.h"
-#include <util/delay.h>
 
 #include "../../MCAL/I2C/I2C_interface.h"
+#include "../../MCAL/TIMER0/TIMER0_interface.h"
 
 #include "EXTEEPROM_interface.h"
 #include "EXTEEPROM_private.h"
@@ -54,6 +54,6 @@ tenuErrorI2C EXTEEPROM_enuWrite(const uint8 u8MemoryLocationCpy, const uint8 u8D
 	enuErrorStatLoc|=I2C_enuMasterWriteData(u8DataCpy);
     /*Stop Condition*/
     I2C_voidStopCondition();
-    _delay_ms(10);
+    TIMER0_voidDelay(3);
     return enuErrorStatLoc;
 }

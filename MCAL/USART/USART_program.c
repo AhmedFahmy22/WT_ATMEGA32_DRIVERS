@@ -176,20 +176,24 @@ tenuErrorStatus USART_enuTransmitSynch(const uint16 u16DataCpy)
 tenuErrorStatus USART_enuGetData(uint16* const pu16DataCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
+    uint8* pu8DataLoc = (uint8*) pu16DataCpy;
 
-    if(pu16DataCpy==NULL_PTR)
+    if(pu8DataLoc==NULL_PTR)
     {
         enuErrorStatLoc = E_NOK_NULL_POINTER;
     }
     else
     {
-        *pu16DataCpy = 0;
+        *pu8DataLoc = 0;
 
         #if USART_CHARACTER_SIZE == USART_CHARACTER_SIZE_9BIT
+        *pu16DataCpy = 0;
         *pu16DataCpy |= (GET_BIT(UCSRB, UCSRB_BIT_RXB8)<<8);
+		#else
+        *((uint8*)pu16DataCpy)=0;
         #endif
 
-        *pu16DataCpy |= UDR;
+        *pu8DataLoc |= UDR;
     }
 
     return enuErrorStatLoc;
@@ -214,7 +218,7 @@ tenuErrorStatus USART_enuSetData(const uint16 u16DataCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus USAR_enuReceiveSetCallBack(const pf pfReceiveISRCpy)
+tenuErrorStatus USART_enuReceiveSetCallBack(const pf pfReceiveISRCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 
@@ -226,7 +230,7 @@ tenuErrorStatus USAR_enuReceiveSetCallBack(const pf pfReceiveISRCpy)
     return enuErrorStatLoc;
 }
 
-tenuErrorStatus USAR_enuTransmitSetCallBack(const pf pfTransmitISRCpy)
+tenuErrorStatus USART_enuTransmitSetCallBack(const pf pfTransmitISRCpy)
 {
     tenuErrorStatus enuErrorStatLoc = E_OK;
 

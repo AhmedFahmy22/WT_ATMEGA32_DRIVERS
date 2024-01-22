@@ -17,6 +17,7 @@
 /*Global Variables*/
 pf pfOvfISRGlb = NULL_PTR;
 pf pfCmpMatchISRGlb = NULL_PTR;
+static uint32 u32OvfCntrGlb = 0;
 
 /*Function Definitions*/
 void TIMER0_voidInit(void)
@@ -157,9 +158,21 @@ tenuErrorStatus TIMER0_enuSetCallBackCmpMatch(const pf pfCmpMatchISRCpy)
     return enuErrorStatLoc;
 }
 
+void TIMER0_voidDelay(uint32 u32OvfDelayCpy)
+{
+	if(TCNT0>150)
+	{
+		u32OvfDelayCpy++;
+	}
+	u32OvfDelayCpy+=2;
+	u32OvfCntrGlb=0;
+	while((u32OvfCntrGlb)!=u32OvfDelayCpy);
+}
+
 void __vector_10 (void) __attribute__ ((signal,used, externally_visible)) ; \
 void __vector_10 (void){
-    if(pfCmpMatchISRGlb!=NULL_PTR)
+	u32OvfCntrGlb++;
+	if(pfCmpMatchISRGlb!=NULL_PTR)
     {
         pfCmpMatchISRGlb();
     }
@@ -167,7 +180,8 @@ void __vector_10 (void){
 
 void __vector_11 (void) __attribute__ ((signal,used, externally_visible)) ; \
 void __vector_11 (void){
-    if(pfOvfISRGlb!=NULL_PTR)
+
+	if(pfOvfISRGlb!=NULL_PTR)
     {
         pfOvfISRGlb();
     }
